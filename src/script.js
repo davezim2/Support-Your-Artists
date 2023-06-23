@@ -98,5 +98,5 @@ function populateUI(profile, playlists) {
     document.getElementById("uri").setAttribute("href", profile.external_urls.spotify);
     document.getElementById("url").innerText = profile.href;
     document.getElementById("url").setAttribute("href", profile.href);
-    document.getElementById("items").innerText = playlists.items;
+    document.getElementById("total").innerText = playlists.total;
     }
