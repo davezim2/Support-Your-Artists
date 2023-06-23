@@ -7,8 +7,9 @@ if (!code) {
 } else {
     const accessToken = await getAccessToken(clientId, code);
     const profile = await fetchProfile(accessToken);
+    const playlists = await getPlaylists(accessToken);
     console.log(profile); // Profile data logs to console
-    populateUI(profile);
+    populateUI(profile, playlists);
 }
 
 export async function redirectToAuthCodeFlow(clientId) {
@@ -75,7 +76,15 @@ async function fetchProfile(token) {
     return await result.json();
 }
 
-function populateUI(profile) {
+async function getPlaylists(token) {
+    const result = await fetch("https://api.spotify.com/v1/me/playlists?limit=50", {
+        method: "GET", headers: { Authorization: `Bearer ${token}` }
+    });
+  
+    return await result.json();
+  }
+
+function populateUI(profile, playlists) {
     document.getElementById("displayName").innerText = profile.display_name;
     if (profile.images[0]) {
         const profileImage = new Image(200, 200);
@@ -89,4 +98,5 @@ function populateUI(profile) {
     document.getElementById("uri").setAttribute("href", profile.external_urls.spotify);
     document.getElementById("url").innerText = profile.href;
     document.getElementById("url").setAttribute("href", profile.href);
+    document.getElementById("total").innerText = playlists.total;
     }
