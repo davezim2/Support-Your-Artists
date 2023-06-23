@@ -7,9 +7,13 @@ if (!code) {
 } else {
     const accessToken = await getAccessToken(clientId, code);
     const profile = await fetchProfile(accessToken);
-    const playlists = await getPlaylists(accessToken);
+    const playlistResponse = await getPlaylists(accessToken);
+    console.log(playlistResponse)
+    const playlistArr = playlistResponse.item;
+    let playlistNames = playlistArr.map(x => x.name);
     console.log(profile); // Profile data logs to console
-    populateUI(profile, playlists);
+    console.log(playlistResponse);
+    populateUI(profile, playlistNames);
 }
 
 export async function redirectToAuthCodeFlow(clientId) {
@@ -84,7 +88,7 @@ async function getPlaylists(token) {
     return await result.json();
   }
 
-function populateUI(profile, playlists) {
+function populateUI(profile, playlistNames) {
     document.getElementById("displayName").innerText = profile.display_name;
     if (profile.images[0]) {
         const profileImage = new Image(200, 200);
@@ -98,5 +102,5 @@ function populateUI(profile, playlists) {
     document.getElementById("uri").setAttribute("href", profile.external_urls.spotify);
     document.getElementById("url").innerText = profile.href;
     document.getElementById("url").setAttribute("href", profile.href);
-    document.getElementById("total").innerText = playlists.total;
+    document.getElementById("playlists").innerText = playlistNames;
     }
