@@ -8,8 +8,7 @@ if (!code) {
     const accessToken = await getAccessToken(clientId, code);
     const profile = await fetchProfile(accessToken);
     const playlistResponse = await getPlaylists(accessToken);
-    console.log(playlistResponse)
-    const playlistArr = playlistResponse.item;
+    const playlistArr = playlistResponse.items;
     let playlistNames = playlistArr.map(x => x.name);
     console.log(profile); // Profile data logs to console
     console.log(playlistResponse);
