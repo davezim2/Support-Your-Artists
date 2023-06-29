@@ -10,9 +10,13 @@ if (!code) {
     const playlistResponse = await getPlaylists(accessToken);
     const playlistArr = playlistResponse.items;
     let playlistNames = playlistArr.map(x => x.name);
+    const artistResponse = await getArtists(acessToken);
+    const artistArr = artistResponse.items;
+    let artistNames = artistArr.map(x = x.name)
+    let artistPop = artist.map(x = x.popularity)
     console.log(profile); // Profile data logs to console
     console.log(playlistResponse);
-    populateUI(profile, playlistNames);
+    populateUI(profile, playlistNames, artistNames, artistPop);
 }
 
 export async function redirectToAuthCodeFlow(clientId) {
@@ -87,7 +91,13 @@ async function getPlaylists(token) {
     return await result.json();
   }
 
-function populateUI(profile, playlistNames) {
+async function getArtists(token) {
+    const result = await fetch("https://api.spotify.com/v1/me/top/artists?limit=50&offset=0", {
+        method: "GET", headers: { Authorization: `Bearer ${token}` }
+    });
+}
+
+function populateUI(profile, playlistNames, artistNames, artistPop) {
     document.getElementById("displayName").innerText = profile.display_name;
     if (profile.images[0]) {
         const profileImage = new Image(200, 200);
@@ -102,4 +112,6 @@ function populateUI(profile, playlistNames) {
     document.getElementById("url").innerText = profile.href;
     document.getElementById("url").setAttribute("href", profile.href);
     document.getElementById("playlists").innerText = playlistNames;
+    document.getElementById("artist").innerText = artistNames;
+    document.getElementById("artistPop").innerText = artistPop;
     }
